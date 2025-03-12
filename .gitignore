@@ -1,0 +1,7 @@
+vkEngine/x64/
+Library/vulkan/Lib/SPIRV-Toolsd.lib
+Library/vulkan/Lib/SPIRV-Tools-opt.lib
+Library/vulkan/Lib/glslangd.lib
+Library/vulkan/Lib/shaderc_combined.lib
+Library/vulkan/Lib/shaderc_combinedd.lib
+Library/vulkan/Lib/SPIRV-Tools-optd.lib
