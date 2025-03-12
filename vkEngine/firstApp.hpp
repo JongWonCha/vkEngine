@@ -16,6 +16,6 @@ namespace lve
     private:
         LveWindow   _lveWindow{WIDTH, HEIGHT, "Hello Vulkan!"};
         LveDevice   _lveDevice{_lveWindow};
-        LvePipeline _lvePipeline{_lveDevice, "shaders\\simpleShader.vert.spv", "shaders\\simpleShader.frag.spv", LvePipeline::defaultPipelineConfigInfo(WIDTH, HEIGHT)};
+        LvePipeline _lvePipeline{_lveDevice, "shaders\\simpleShader.vert.spv", "shaders\\simpleShader.frag.spv", LvePipeline::DefaultPipelineConfigInfo(WIDTH, HEIGHT)};
     };
 }
