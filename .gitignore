@@ -7,3 +7,4 @@ Library/vulkan/Lib/shaderc_combinedd.lib
 Library/vulkan/Lib/SPIRV-Tools-optd.lib
 .idea/
 x64/
+.vs/

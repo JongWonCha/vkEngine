@@ -137,7 +137,8 @@
   <ItemGroup>
     <ClCompile Include="firstApp.cpp" />
     <ClCompile Include="lveDevice.cpp" />
-    <ClCompile Include="LveSwapChain.cpp" />
+    <ClCompile Include="lveModel.cpp" />
+    <ClCompile Include="lveSwapChain.cpp" />
     <ClCompile Include="lvePipeline.cpp" />
     <ClCompile Include="lvewindow.cpp" />
     <ClCompile Include="main.cpp" />
@@ -145,7 +146,8 @@
   <ItemGroup>
     <ClInclude Include="firstApp.hpp" />
     <ClInclude Include="lveDevice.hpp" />
-    <ClInclude Include="LveSwapChain.hpp" />
+    <ClInclude Include="lveModel.hpp" />
+    <ClInclude Include="lveSwapChain.hpp" />
     <ClInclude Include="lvePipeline.hpp" />
     <ClInclude Include="lvewindow.hpp" />
   </ItemGroup>

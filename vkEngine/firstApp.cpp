@@ -7,6 +7,7 @@ namespace lve
 {
     FirstApp::FirstApp()
     {
+        LoadModels();
         CreatePipelineLayout();
         CreatePipeline();
         CreateCommandBuffers();
@@ -22,9 +23,21 @@ namespace lve
         while ( !_lveWindow.ShouldClose() )
         {
             glfwPollEvents();
-            drawFrame();
+            DrawFrame();
         }
         vkDeviceWaitIdle(_lveDevice.device());
+    }
+
+    void FirstApp::LoadModels()
+    {
+        std::vector<LveModel::Vertex> vertices
+        {
+            { {0.0f, -0.5f} },
+            { {0.5f, 0.5f} },
+            { {-0.5f, 0.5f} }
+        };
+
+        _lveModel = std::make_unique<LveModel>(_lveDevice, vertices);
     }
 
     void FirstApp::CreatePipelineLayout()
@@ -58,24 +71,24 @@ namespace lve
 
     void FirstApp::CreateCommandBuffers()
     {
-        _CommandBuffers.resize(_lveSwapChain.imageCount());
+        _commandBuffers.resize(_lveSwapChain.imageCount());
 
         VkCommandBufferAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
         allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
         allocInfo.commandPool = _lveDevice.getCommandPool();
-        allocInfo.commandBufferCount = static_cast<uint32_t>(_CommandBuffers.size());
+        allocInfo.commandBufferCount = static_cast<uint32_t>(_commandBuffers.size());
 
-        if ( vkAllocateCommandBuffers(_lveDevice.device(), &allocInfo, _CommandBuffers.data()) != VK_SUCCESS )
+        if ( vkAllocateCommandBuffers(_lveDevice.device(), &allocInfo, _commandBuffers.data()) != VK_SUCCESS )
         {
             throw std::runtime_error("failed to allocate command buffers");
         }
 
-        for (int i = 0; i < _CommandBuffers.size(); i++)
+        for (int i = 0; i < _commandBuffers.size(); i++)
         {
             VkCommandBufferBeginInfo beginInfo{};
             beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-            if ( vkBeginCommandBuffer(_CommandBuffers[i], &beginInfo) != VK_SUCCESS )
+            if ( vkBeginCommandBuffer(_commandBuffers[i], &beginInfo) != VK_SUCCESS )
             {
                 throw std::runtime_error("failed to begin recording command buffers");
             }
@@ -94,21 +107,22 @@ namespace lve
             renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
             renderPassInfo.pClearValues = clearValues.data();
 
-            vkCmdBeginRenderPass(_CommandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+            vkCmdBeginRenderPass(_commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-            _lvePipeline->Bind(_CommandBuffers[i]);
-            vkCmdDraw(_CommandBuffers[i], 3, 1, 0, 0);
+            _lvePipeline->Bind(_commandBuffers[i]);
+            _lveModel->Bind(_commandBuffers[i]);
+            _lveModel->Draw(_commandBuffers[i]);
 
-            vkCmdEndRenderPass(_CommandBuffers[i]);
+            vkCmdEndRenderPass(_commandBuffers[i]);
 
-            if ( vkEndCommandBuffer(_CommandBuffers[i]) != VK_SUCCESS )
+            if ( vkEndCommandBuffer(_commandBuffers[i]) != VK_SUCCESS )
             {
                 throw std::runtime_error("failed to record command buffers");
             }
         }
     }
 
-    void FirstApp::drawFrame()
+    void FirstApp::DrawFrame()
     {
         uint32_t imageIndex = 0;
         auto result = _lveSwapChain.acquireNextImage(&imageIndex);
@@ -117,7 +131,7 @@ namespace lve
         {
             throw std::runtime_error("failed to acquire swap chain image");
         }
-        result = _lveSwapChain.submitCommandBuffers(&_CommandBuffers[imageIndex], &imageIndex);
+        result = _lveSwapChain.submitCommandBuffers(&_commandBuffers[imageIndex], &imageIndex);
 
         if ( result != VK_SUCCESS )
         {
