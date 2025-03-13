@@ -30,12 +30,14 @@ namespace lve
 
     void FirstApp::LoadModels()
     {
-        std::vector<LveModel::Vertex> vertices
-        {
-            { {0.0f, -0.5f} },
-            { {0.5f, 0.5f} },
-            { {-0.5f, 0.5f} }
-        };
+        std::vector<LveModel::Vertex> vertices(3);
+        vertices[0].position = { 0.0f, -0.5f };
+        vertices[0].color = { 1.0f, 0.0f, 0.0f };
+        vertices[1].position = { 0.5f, 0.5f };
+        vertices[1].color = { 0.0f, 1.0f, 0.0f };
+        vertices[2].position = { -0.5f, 0.5f };
+        vertices[2].color = { 0.0f, 0.0f, 1.0f };
+        
 
         _lveModel = std::make_unique<LveModel>(_lveDevice, vertices);
     }
