@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "lvewindow.hpp"
+#include "lveWindow.hpp"
 #include "lvePipeline.hpp"
 #include "lveDevice.hpp"
 #include "lveSwapChain.hpp"
@@ -30,15 +30,18 @@ namespace lve
         void CreatePipelineLayout();
         void CreatePipeline();
         void CreateCommandBuffers();
+        void FreeCommandBuffers();
         void DrawFrame();
+        void RecreateSwapChain();
+        void RecordCommandBuffer(int imageIndex);
         
-        LveWindow       _lveWindow{WIDTH, HEIGHT, "Hello Vulkan!"};
-        LveDevice       _lveDevice{_lveWindow};
-        LveSwapChain    _lveSwapChain{_lveDevice, _lveWindow.GetExtent()};
-        std::unique_ptr<LvePipeline> _lvePipeline;
-        VkPipelineLayout _lvePipelineLayout = VK_NULL_HANDLE;
-        std::vector<VkCommandBuffer> _commandBuffers;
-        std::unique_ptr<LveModel> _lveModel;
+        LveWindow                       _lveWindow{WIDTH, HEIGHT, "Hello Vulkan!"};
+        LveDevice                       _lveDevice{_lveWindow};
+        std::unique_ptr<LveSwapChain>   _lveSwapChain;
+        std::unique_ptr<LvePipeline>    _lvePipeline;
+        VkPipelineLayout                _lvePipelineLayout = VK_NULL_HANDLE;
+        std::vector<VkCommandBuffer>    _commandBuffers;
+        std::unique_ptr<LveModel>       _lveModel;
         //LvePipeline     _lvePipeline{_lveDevice, "shaders\\simpleShader.vert.spv", "shaders\\simpleShader.frag.spv", LvePipeline::DefaultPipelineConfigInfo(WIDTH, HEIGHT)};
     };
 }

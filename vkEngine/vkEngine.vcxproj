@@ -140,7 +140,7 @@
     <ClCompile Include="lveModel.cpp" />
     <ClCompile Include="lveSwapChain.cpp" />
     <ClCompile Include="lvePipeline.cpp" />
-    <ClCompile Include="lvewindow.cpp" />
+    <ClCompile Include="lveWindow.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -149,7 +149,7 @@
     <ClInclude Include="lveModel.hpp" />
     <ClInclude Include="lveSwapChain.hpp" />
     <ClInclude Include="lvePipeline.hpp" />
-    <ClInclude Include="lvewindow.hpp" />
+    <ClInclude Include="lveWindow.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="compile.bat" />

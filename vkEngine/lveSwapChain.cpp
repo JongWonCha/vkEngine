@@ -12,13 +12,17 @@
 namespace lve {
 
 LveSwapChain::LveSwapChain(LveDevice &deviceRef, VkExtent2D extent)
-    : _device{deviceRef}, _windowExtent{extent} {
-  createSwapChain();
-  createImageViews();
-  createRenderPass();
-  createDepthResources();
-  createFramebuffers();
-  createSyncObjects();
+    : _device{deviceRef}, _windowExtent{extent}
+{
+    Init();
+}
+
+LveSwapChain::LveSwapChain(LveDevice& deviceRef, VkExtent2D windowExtent, std::shared_ptr<LveSwapChain> previous) : _device(deviceRef), _windowExtent(windowExtent), _oldSwapChain(previous)
+{
+    Init();
+
+    // clean up old swap chain since it's no longer needed
+    _oldSwapChain = nullptr;
 }
 
 LveSwapChain::~LveSwapChain()
@@ -51,6 +55,16 @@ LveSwapChain::~LveSwapChain()
     vkDestroySemaphore(_device.device(), _imageAvailableSemaphores[i], nullptr);
     vkDestroyFence(_device.device(), _inFlightFences[i], nullptr);
   }
+}
+
+void LveSwapChain::Init()
+{
+    createSwapChain();
+    createImageViews();
+    createRenderPass();
+    createDepthResources();
+    createFramebuffers();
+    createSyncObjects();
 }
 
 VkResult LveSwapChain::acquireNextImage(uint32_t *imageIndex) {
@@ -163,7 +177,7 @@ void LveSwapChain::createSwapChain() {
   createInfo.presentMode = presentMode;
   createInfo.clipped = VK_TRUE;
 
-  createInfo.oldSwapchain = VK_NULL_HANDLE;
+  createInfo.oldSwapchain = _oldSwapChain == nullptr ? VK_NULL_HANDLE : _oldSwapChain->_swapChain;
 
   if (vkCreateSwapchainKHR(_device.device(), &createInfo, nullptr, &_swapChain) != VK_SUCCESS) {
     throw std::runtime_error("failed to create swap chain!");
