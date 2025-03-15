@@ -12,16 +12,16 @@
 
 namespace chVk {
 
-class chVkSwapChain {
+class ChVkSwapChain {
  public:
   static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
 
-  chVkSwapChain(chVkDevice &deviceRef, VkExtent2D windowExtent);
-  chVkSwapChain(chVkDevice& deviceRef, VkExtent2D windowExtent, std::shared_ptr<chVkSwapChain> previous);
-  ~chVkSwapChain();
+  ChVkSwapChain(ChVkDevice &deviceRef, VkExtent2D windowExtent);
+  ChVkSwapChain(ChVkDevice& deviceRef, VkExtent2D windowExtent, std::shared_ptr<ChVkSwapChain> previous);
+  ~ChVkSwapChain();
 
-  chVkSwapChain(const chVkSwapChain &) = delete;
-  chVkSwapChain& operator=(const chVkSwapChain &) = delete;
+  ChVkSwapChain(const ChVkSwapChain &) = delete;
+  ChVkSwapChain& operator=(const ChVkSwapChain &) = delete;
 
   VkFramebuffer getFrameBuffer(int index) { return _swapChainFramebuffers[index]; }
   VkRenderPass getRenderPass() { return _renderPass; }
@@ -38,7 +38,7 @@ class chVkSwapChain {
   VkFormat findDepthFormat();
 
   VkResult acquireNextImage(uint32_t *imageIndex);
-  VkResult submitCommandBuffers(const VkCommandBuffer *buffers, uint32_t *imageIndex);
+  VkResult SubmitCommandBuffers(const VkCommandBuffer *buffers, uint32_t *imageIndex);
 
  private:
     void Init();
@@ -68,11 +68,11 @@ class chVkSwapChain {
   std::vector<VkImage> _swapChainImages;
   std::vector<VkImageView> _swapChainImageViews;
 
-  chVkDevice& _device;
+  ChVkDevice& _device;
   VkExtent2D _windowExtent;
 
   VkSwapchainKHR _swapChain;
-  std::shared_ptr<chVkSwapChain> _oldSwapChain;
+  std::shared_ptr<ChVkSwapChain> _oldSwapChain;
 
   std::vector<VkSemaphore> _imageAvailableSemaphores;
   std::vector<VkSemaphore> _renderFinishedSemaphores;

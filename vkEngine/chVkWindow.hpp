@@ -5,7 +5,7 @@
 
 namespace chVk
 {
-	class chVkWindow
+	class ChVkWindow
 	{
 	private:
 		int	_width;
@@ -19,12 +19,12 @@ namespace chVk
 		void InitWindow();
 		static void FrameBufferResizeCallback(GLFWwindow* window, int width, int height);
 	public:
-		chVkWindow(int width, int height, std::string windowName);
-		~chVkWindow();
+		ChVkWindow(int width, int height, std::string windowName);
+		~ChVkWindow();
 
 		
-		chVkWindow(const chVkWindow& other) = delete;
-		chVkWindow& operator=(const chVkWindow& other) = delete;
+		ChVkWindow(const ChVkWindow& other) = delete;
+		ChVkWindow& operator=(const ChVkWindow& other) = delete;
 
 		bool ShouldClose() const { return glfwWindowShouldClose(_window); }
 		VkExtent2D GetExtent() const {return {static_cast<uint32_t>(_width), static_cast<uint32_t>(_height)};}

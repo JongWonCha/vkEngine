@@ -4,7 +4,7 @@
 
 namespace chVk
 {
-    chVkModel::chVkModel(chVkDevice& chVkDevice, const std::vector<Vertex>& vertices) : _device(chVkDevice)
+    chVkModel::chVkModel(ChVkDevice& chVkDevice, const std::vector<Vertex>& vertices) : _device(chVkDevice)
     {
         CreateVertexBuffers(vertices);
         

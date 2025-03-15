@@ -19,7 +19,7 @@ namespace chVk
             static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();
         };
 
-        chVkModel(chVkDevice& chVkDevice, const std::vector<Vertex>& vertices);
+        chVkModel(ChVkDevice& chVkDevice, const std::vector<Vertex>& vertices);
         ~chVkModel();
 
         chVkModel(const chVkModel&) = delete;
@@ -30,7 +30,7 @@ namespace chVk
     private:
         void CreateVertexBuffers(const std::vector<Vertex>& vertices);
         
-        chVkDevice&      _device;
+        ChVkDevice&      _device;
         VkBuffer        _vertexBuffer;
         VkDeviceMemory  _vertexBufferMemory;
         uint32_t        _vertexCount;

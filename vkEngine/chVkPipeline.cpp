@@ -8,7 +8,7 @@
 
 namespace chVk
 {
-    chVkPipeline::chVkPipeline(chVkDevice& device, const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo& configInfo) : _chVkDevice(device)
+    chVkPipeline::chVkPipeline(ChVkDevice& device, const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo& configInfo) : _chVkDevice(device)
     {
         CreateGraphicsPipeline(vertFilePath, fragFilePath, configInfo);
     }

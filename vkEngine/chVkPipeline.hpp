@@ -26,7 +26,7 @@ namespace chVk
     class chVkPipeline
     {
     public:
-        chVkPipeline(chVkDevice& device, const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo& configInfo);
+        chVkPipeline(ChVkDevice& device, const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo& configInfo);
         ~chVkPipeline();
 
         chVkPipeline(const chVkPipeline&) = delete;
@@ -44,7 +44,7 @@ namespace chVk
 
         void CreateShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule);
 
-        chVkDevice&      _chVkDevice;
+        ChVkDevice&      _chVkDevice;
         VkPipeline      _graphicsPipeline;
         VkShaderModule  _vertShaderModule;
         VkShaderModule  _fragShaderModule;

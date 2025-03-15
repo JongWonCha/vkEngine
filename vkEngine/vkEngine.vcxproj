@@ -135,6 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="chVkRenderer.cpp" />
     <ClCompile Include="firstApp.cpp" />
     <ClCompile Include="chVkDevice.cpp" />
     <ClCompile Include="chVkGameObject.cpp" />
@@ -145,6 +146,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="chVkRenderer.hpp" />
     <ClInclude Include="firstApp.hpp" />
     <ClInclude Include="chVkDevice.hpp" />
     <ClInclude Include="chVkGameObject.hpp" />
