@@ -1,16 +1,16 @@
 ﻿#pragma once
 
-#include "lveWindow.hpp"
-#include "lvePipeline.hpp"
-#include "lveDevice.hpp"
-#include "lveSwapChain.hpp"
-#include "lveModel.hpp"
+#include "chVkWindow.hpp"
+#include "chVkPipeline.hpp"
+#include "chVkDevice.hpp"
+#include "chVkSwapChain.hpp"
+#include "chVkGameObject.hpp"
 
 // std
 #include <memory>
 #include <vector>
 
-namespace lve
+namespace chVk
 {
     class FirstApp
     {
@@ -26,7 +26,7 @@ namespace lve
 
         void Run();
     private:
-        void LoadModels();
+        void LoadGameObjects();
         void CreatePipelineLayout();
         void CreatePipeline();
         void CreateCommandBuffers();
@@ -34,14 +34,15 @@ namespace lve
         void DrawFrame();
         void RecreateSwapChain();
         void RecordCommandBuffer(int imageIndex);
+        void RenderGameObjects(VkCommandBuffer commandBuffer);
         
-        LveWindow                       _lveWindow{WIDTH, HEIGHT, "Hello Vulkan!"};
-        LveDevice                       _lveDevice{_lveWindow};
-        std::unique_ptr<LveSwapChain>   _lveSwapChain;
-        std::unique_ptr<LvePipeline>    _lvePipeline;
-        VkPipelineLayout                _lvePipelineLayout = VK_NULL_HANDLE;
+        chVkWindow                      _chVkWindow{WIDTH, HEIGHT, "Hello Vulkan!"};
+        chVkDevice                      _chVkDevice{_chVkWindow};
+        std::unique_ptr<chVkSwapChain>  _chVkSwapChain;
+        std::unique_ptr<chVkPipeline>   _chVkPipeline;
+        VkPipelineLayout                _chVkPipelineLayout = VK_NULL_HANDLE;
         std::vector<VkCommandBuffer>    _commandBuffers;
-        std::unique_ptr<LveModel>       _lveModel;
-        //LvePipeline     _lvePipeline{_lveDevice, "shaders\\simpleShader.vert.spv", "shaders\\simpleShader.frag.spv", LvePipeline::DefaultPipelineConfigInfo(WIDTH, HEIGHT)};
+        std::vector<chVkGameObject>     _chVkGameObjects;
+        //chVkPipeline     _chVkPipeline{_chVkDevice, "shaders\\simpleShader.vert.spv", "shaders\\simpleShader.frag.spv", chVkPipeline::DefaultPipelineConfigInfo(WIDTH, HEIGHT)};
     };
 }

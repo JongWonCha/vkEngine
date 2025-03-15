@@ -136,20 +136,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="firstApp.cpp" />
-    <ClCompile Include="lveDevice.cpp" />
-    <ClCompile Include="lveModel.cpp" />
-    <ClCompile Include="lveSwapChain.cpp" />
-    <ClCompile Include="lvePipeline.cpp" />
-    <ClCompile Include="lveWindow.cpp" />
+    <ClCompile Include="chVkDevice.cpp" />
+    <ClCompile Include="chVkGameObject.cpp" />
+    <ClCompile Include="chVkModel.cpp" />
+    <ClCompile Include="chVkSwapChain.cpp" />
+    <ClCompile Include="chVkPipeline.cpp" />
+    <ClCompile Include="chVkWindow.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="firstApp.hpp" />
-    <ClInclude Include="lveDevice.hpp" />
-    <ClInclude Include="lveModel.hpp" />
-    <ClInclude Include="lveSwapChain.hpp" />
-    <ClInclude Include="lvePipeline.hpp" />
-    <ClInclude Include="lveWindow.hpp" />
+    <ClInclude Include="chVkDevice.hpp" />
+    <ClInclude Include="chVkGameObject.hpp" />
+    <ClInclude Include="chVkModel.hpp" />
+    <ClInclude Include="chVkSwapChain.hpp" />
+    <ClInclude Include="chVkPipeline.hpp" />
+    <ClInclude Include="chVkWindow.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="compile.bat" />

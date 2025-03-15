@@ -2,9 +2,9 @@
 
 #include <string>
 #include <vector>
-#include "lveDevice.hpp"
+#include "chVkDevice.hpp"
 
-namespace lve
+namespace chVk
 {
     struct PipelineConfigInfo
     {
@@ -23,15 +23,15 @@ namespace lve
         VkRenderPass                                renderPass = nullptr;
         uint32_t                                    subpass = 0;
     };
-    class LvePipeline
+    class chVkPipeline
     {
     public:
-        LvePipeline(LveDevice& device, const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo& configInfo);
-        ~LvePipeline();
+        chVkPipeline(chVkDevice& device, const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo& configInfo);
+        ~chVkPipeline();
 
-        LvePipeline(const LvePipeline&) = delete;
-        LvePipeline& operator=(const LvePipeline&) = delete;
-        LvePipeline() = default;
+        chVkPipeline(const chVkPipeline&) = delete;
+        chVkPipeline& operator=(const chVkPipeline&) = delete;
+        chVkPipeline() = default;
         
         void Bind(VkCommandBuffer commandBuffer);
 
@@ -44,7 +44,7 @@ namespace lve
 
         void CreateShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule);
 
-        LveDevice&      _lveDevice;
+        chVkDevice&      _chVkDevice;
         VkPipeline      _graphicsPipeline;
         VkShaderModule  _vertShaderModule;
         VkShaderModule  _fragShaderModule;

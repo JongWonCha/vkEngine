@@ -1,26 +1,26 @@
-﻿#include "lvePipeline.hpp"
+﻿#include "chVkPipeline.hpp"
 
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
 #include <cassert>
-#include "lveModel.hpp"
+#include "chVkModel.hpp"
 
-namespace lve
+namespace chVk
 {
-    LvePipeline::LvePipeline(LveDevice& device, const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo& configInfo) : _lveDevice(device)
+    chVkPipeline::chVkPipeline(chVkDevice& device, const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo& configInfo) : _chVkDevice(device)
     {
         CreateGraphicsPipeline(vertFilePath, fragFilePath, configInfo);
     }
 
-    LvePipeline::~LvePipeline()
+    chVkPipeline::~chVkPipeline()
     {
-        vkDestroyShaderModule(_lveDevice.device(), _vertShaderModule, nullptr);
-        vkDestroyShaderModule(_lveDevice.device(), _fragShaderModule, nullptr);
-        vkDestroyPipeline(_lveDevice.device(), _graphicsPipeline, nullptr);
+        vkDestroyShaderModule(_chVkDevice.device(), _vertShaderModule, nullptr);
+        vkDestroyShaderModule(_chVkDevice.device(), _fragShaderModule, nullptr);
+        vkDestroyPipeline(_chVkDevice.device(), _graphicsPipeline, nullptr);
     }
 
-    void LvePipeline::CreateGraphicsPipeline(const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo& configInfo)
+    void chVkPipeline::CreateGraphicsPipeline(const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo& configInfo)
     {
         assert(configInfo.pipelineLayout != VK_NULL_HANDLE && "Pipeline layout is null");
         assert(configInfo.renderPass != VK_NULL_HANDLE && "Render pass is null");
@@ -47,8 +47,8 @@ namespace lve
         shaderStages[1].pNext = nullptr;
         shaderStages[1].pSpecializationInfo = nullptr;
 
-        auto bindingDescriptions = LveModel::Vertex::getBindingDescriptions();
-        auto attributeDescriptions = LveModel::Vertex::getAttributeDescriptions();
+        auto bindingDescriptions = chVkModel::Vertex::getBindingDescriptions();
+        auto attributeDescriptions = chVkModel::Vertex::getAttributeDescriptions();
         
         VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -85,7 +85,7 @@ namespace lve
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
         if (vkCreateGraphicsPipelines(
-         _lveDevice.device(),
+         _chVkDevice.device(),
          VK_NULL_HANDLE,
          1,
          &pipelineInfo,
@@ -100,24 +100,24 @@ namespace lve
         std::cout << "Fragment Shader Code Size : " << fragCode.size() << "\n";
     }
 
-    void LvePipeline::CreateShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule)
+    void chVkPipeline::CreateShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule)
     {
         VkShaderModuleCreateInfo createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
         createInfo.codeSize = code.size();
         createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
-        if ( vkCreateShaderModule(_lveDevice.device(), &createInfo, nullptr, shaderModule) != VK_SUCCESS )
+        if ( vkCreateShaderModule(_chVkDevice.device(), &createInfo, nullptr, shaderModule) != VK_SUCCESS )
         {
             throw std::runtime_error("failed to create shader module!");
         }
     }
     
-    void LvePipeline::Bind(VkCommandBuffer commandBuffer)
+    void chVkPipeline::Bind(VkCommandBuffer commandBuffer)
     {
         vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, _graphicsPipeline);
     }
 
-    void LvePipeline::DefaultPipelineConfigInfo(PipelineConfigInfo& configInfo)
+    void chVkPipeline::DefaultPipelineConfigInfo(PipelineConfigInfo& configInfo)
     {
         configInfo.inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
         configInfo.inputAssemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
@@ -199,7 +199,7 @@ namespace lve
         
     }
 
-    std::vector<char> LvePipeline::ReadFile(const std::string& filePath)
+    std::vector<char> chVkPipeline::ReadFile(const std::string& filePath)
     {
         std::ifstream file(filePath, std::ios::ate | std::ios::binary);
 

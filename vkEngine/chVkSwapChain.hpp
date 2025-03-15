@@ -1,6 +1,6 @@
 #pragma once
 
-#include "lvedevice.hpp"
+#include "chVkdevice.hpp"
 
 // vulkan headers
 #include <vulkan/vulkan.h>
@@ -10,18 +10,18 @@
 #include <vector>
 #include <memory>
 
-namespace lve {
+namespace chVk {
 
-class LveSwapChain {
+class chVkSwapChain {
  public:
   static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
 
-  LveSwapChain(LveDevice &deviceRef, VkExtent2D windowExtent);
-  LveSwapChain(LveDevice& deviceRef, VkExtent2D windowExtent, std::shared_ptr<LveSwapChain> previous);
-  ~LveSwapChain();
+  chVkSwapChain(chVkDevice &deviceRef, VkExtent2D windowExtent);
+  chVkSwapChain(chVkDevice& deviceRef, VkExtent2D windowExtent, std::shared_ptr<chVkSwapChain> previous);
+  ~chVkSwapChain();
 
-  LveSwapChain(const LveSwapChain &) = delete;
-  LveSwapChain& operator=(const LveSwapChain &) = delete;
+  chVkSwapChain(const chVkSwapChain &) = delete;
+  chVkSwapChain& operator=(const chVkSwapChain &) = delete;
 
   VkFramebuffer getFrameBuffer(int index) { return _swapChainFramebuffers[index]; }
   VkRenderPass getRenderPass() { return _renderPass; }
@@ -68,11 +68,11 @@ class LveSwapChain {
   std::vector<VkImage> _swapChainImages;
   std::vector<VkImageView> _swapChainImageViews;
 
-  LveDevice& _device;
+  chVkDevice& _device;
   VkExtent2D _windowExtent;
 
   VkSwapchainKHR _swapChain;
-  std::shared_ptr<LveSwapChain> _oldSwapChain;
+  std::shared_ptr<chVkSwapChain> _oldSwapChain;
 
   std::vector<VkSemaphore> _imageAvailableSemaphores;
   std::vector<VkSemaphore> _renderFinishedSemaphores;
@@ -81,4 +81,4 @@ class LveSwapChain {
   size_t _currentFrame = 0;
 };
 
-}  // namespace lve
+}  // namespace chVk

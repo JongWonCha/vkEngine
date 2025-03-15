@@ -24,19 +24,22 @@
     <ClCompile Include="firstApp.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="lveDevice.cpp">
+    <ClCompile Include="chVkDevice.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="lveModel.cpp">
+    <ClCompile Include="chVkModel.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="lveSwapChain.cpp">
+    <ClCompile Include="chVkSwapChain.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="lvePipeline.cpp">
+    <ClCompile Include="chVkPipeline.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="lveWindow.cpp">
+    <ClCompile Include="chVkWindow.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="chVkGameObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,19 +47,22 @@
     <ClInclude Include="firstApp.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="lveDevice.hpp">
+    <ClInclude Include="chVkDevice.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="lveModel.hpp">
+    <ClInclude Include="chVkModel.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="lveSwapChain.hpp">
+    <ClInclude Include="chVkSwapChain.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="lvePipeline.hpp">
+    <ClInclude Include="chVkPipeline.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="lveWindow.hpp">
+    <ClInclude Include="chVkWindow.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="chVkGameObject.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,15 +3,17 @@
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
+#include <glm/gtc/constants.hpp>
 
 #include <stdexcept>
 #include <array>
 #include <cassert>
 
-namespace lve
+namespace chVk
 {
     struct SimplePushConstantData
     {
+        glm::mat2 transform {1.f};
         // same as vec2, vec2(padding), vec3
         glm::vec2 offset;
         alignas(16) glm::vec3 color;
@@ -20,7 +22,7 @@ namespace lve
 
     FirstApp::FirstApp()
     {
-        LoadModels();
+        LoadGameObjects();
         CreatePipelineLayout();
         RecreateSwapChain();
         CreateCommandBuffers();
@@ -28,22 +30,22 @@ namespace lve
 
     FirstApp::~FirstApp()
     {
-        vkDestroyPipelineLayout(_lveDevice.device(), _lvePipelineLayout, nullptr);
+        vkDestroyPipelineLayout(_chVkDevice.device(), _chVkPipelineLayout, nullptr);
     }
 
     void FirstApp::Run()
     {
-        while ( !_lveWindow.ShouldClose() )
+        while ( !_chVkWindow.ShouldClose() )
         {
             glfwPollEvents();
             DrawFrame();
         }
-        vkDeviceWaitIdle(_lveDevice.device());
+        vkDeviceWaitIdle(_chVkDevice.device());
     }
 
-    void FirstApp::LoadModels()
+    void FirstApp::LoadGameObjects()
     {
-        std::vector<LveModel::Vertex> vertices(3);
+        std::vector<chVkModel::Vertex> vertices(3);
         vertices[0].position = { 0.0f, -0.5f };
         vertices[0].color = { 1.0f, 0.0f, 0.0f };
         vertices[1].position = { 0.5f, 0.5f };
@@ -52,7 +54,16 @@ namespace lve
         vertices[2].color = { 0.0f, 0.0f, 1.0f };
         
 
-        _lveModel = std::make_unique<LveModel>(_lveDevice, vertices);
+        auto _chVkModel = std::make_shared<chVkModel>(_chVkDevice, vertices);
+
+        auto triangle = chVkGameObject::CreateGameObject();
+        triangle._model = _chVkModel;
+        triangle._color = glm::vec3(0.1f, 0.8f, 0.1f);
+        triangle._transform2d.translation.x = 0.2f;
+        triangle._transform2d.scale = { 2.f, 0.5f };
+        triangle._transform2d.rotation = 0.25f * glm::two_pi<float>();
+        
+        _chVkGameObjects.push_back(std::move(triangle));
     }
 
     void FirstApp::CreatePipelineLayout()
@@ -71,7 +82,7 @@ namespace lve
         pipelineLayoutInfo.pushConstantRangeCount = 1;
         pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
 
-        if ( vkCreatePipelineLayout(_lveDevice.device(), &pipelineLayoutInfo, nullptr, &_lvePipelineLayout) != VK_SUCCESS )
+        if ( vkCreatePipelineLayout(_chVkDevice.device(), &pipelineLayoutInfo, nullptr, &_chVkPipelineLayout) != VK_SUCCESS )
         {
             throw std::runtime_error("failed to create pipeline layout");
         }
@@ -80,12 +91,12 @@ namespace lve
     void FirstApp::CreatePipeline()
     {
         PipelineConfigInfo pipelineConfig{};
-        LvePipeline::DefaultPipelineConfigInfo(pipelineConfig);
+        chVkPipeline::DefaultPipelineConfigInfo(pipelineConfig);
 
-        pipelineConfig.renderPass = _lveSwapChain->getRenderPass();
-        pipelineConfig.pipelineLayout = _lvePipelineLayout;
-        _lvePipeline = std::make_unique<LvePipeline>(
-            _lveDevice,
+        pipelineConfig.renderPass = _chVkSwapChain->getRenderPass();
+        pipelineConfig.pipelineLayout = _chVkPipelineLayout;
+        _chVkPipeline = std::make_unique<chVkPipeline>(
+            _chVkDevice,
             "shaders\\simpleShader.vert.spv",
             "shaders\\simpleShader.frag.spv",
             pipelineConfig
@@ -94,18 +105,18 @@ namespace lve
 
     void FirstApp::CreateCommandBuffers()
     {
-        assert(_lveSwapChain != nullptr && "Cannot Create Pipeline befor SwapChain");
-        assert(_lvePipelineLayout != nullptr && "Cannot Create Pipeline befor pipeline layout");
+        assert(_chVkSwapChain != nullptr && "Cannot Create Pipeline befor SwapChain");
+        assert(_chVkPipelineLayout != nullptr && "Cannot Create Pipeline befor pipeline layout");
 
-        _commandBuffers.resize(_lveSwapChain->imageCount());
+        _commandBuffers.resize(_chVkSwapChain->imageCount());
 
         VkCommandBufferAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
         allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        allocInfo.commandPool = _lveDevice.getCommandPool();
+        allocInfo.commandPool = _chVkDevice.getCommandPool();
         allocInfo.commandBufferCount = static_cast<uint32_t>(_commandBuffers.size());
 
-        if ( vkAllocateCommandBuffers(_lveDevice.device(), &allocInfo, _commandBuffers.data()) != VK_SUCCESS )
+        if ( vkAllocateCommandBuffers(_chVkDevice.device(), &allocInfo, _commandBuffers.data()) != VK_SUCCESS )
         {
             throw std::runtime_error("failed to allocate command buffers");
         }
@@ -113,14 +124,14 @@ namespace lve
 
     void FirstApp::FreeCommandBuffers()
     {
-        vkFreeCommandBuffers(_lveDevice.device(), _lveDevice.getCommandPool(), static_cast<uint32_t>(_commandBuffers.size()), _commandBuffers.data());
+        vkFreeCommandBuffers(_chVkDevice.device(), _chVkDevice.getCommandPool(), static_cast<uint32_t>(_commandBuffers.size()), _commandBuffers.data());
         _commandBuffers.clear();
     }
 
     void FirstApp::DrawFrame()
     {
         uint32_t imageIndex = 0;
-        auto result = _lveSwapChain->acquireNextImage(&imageIndex);
+        auto result = _chVkSwapChain->acquireNextImage(&imageIndex);
 
         if (result == VK_ERROR_OUT_OF_DATE_KHR)
         {
@@ -135,11 +146,11 @@ namespace lve
 
         RecordCommandBuffer(imageIndex);
 
-        result = _lveSwapChain->submitCommandBuffers(&_commandBuffers[imageIndex], &imageIndex);
+        result = _chVkSwapChain->submitCommandBuffers(&_commandBuffers[imageIndex], &imageIndex);
 
-        if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || _lveWindow.WasWindowResized())
+        if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || _chVkWindow.WasWindowResized())
         {
-            _lveWindow.ResetWindowResizedFlag();
+            _chVkWindow.ResetWindowResizedFlag();
             RecreateSwapChain();
             return;
         }
@@ -152,9 +163,6 @@ namespace lve
 
     void FirstApp::RecordCommandBuffer(int imageIndex)
     {
-        static int frame = 0;
-        frame = (frame + 1) % 10000;
-        
         VkCommandBufferBeginInfo beginInfo{};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
         if (vkBeginCommandBuffer(_commandBuffers[imageIndex], &beginInfo) != VK_SUCCESS)
@@ -164,11 +172,11 @@ namespace lve
 
         VkRenderPassBeginInfo renderPassInfo{};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-        renderPassInfo.renderPass = _lveSwapChain->getRenderPass();
-        renderPassInfo.framebuffer = _lveSwapChain->getFrameBuffer(imageIndex);
+        renderPassInfo.renderPass = _chVkSwapChain->getRenderPass();
+        renderPassInfo.framebuffer = _chVkSwapChain->getFrameBuffer(imageIndex);
 
         renderPassInfo.renderArea.offset = { 0, 0 };
-        renderPassInfo.renderArea.extent = _lveSwapChain->getSwapChainExtent();
+        renderPassInfo.renderArea.extent = _chVkSwapChain->getSwapChainExtent();
 
         std::array<VkClearValue, 2> clearValues{};
         clearValues[0].color = { 0.1f, 0.1f, 0.1f, 1.0f };
@@ -181,32 +189,17 @@ namespace lve
         VkViewport viewport{};
         viewport.x = 0.0f;
         viewport.y = 0.0f;
-        viewport.width = static_cast<float>(_lveSwapChain->getSwapChainExtent().width);
-        viewport.height = static_cast<float>(_lveSwapChain->getSwapChainExtent().height);
+        viewport.width = static_cast<float>(_chVkSwapChain->getSwapChainExtent().width);
+        viewport.height = static_cast<float>(_chVkSwapChain->getSwapChainExtent().height);
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
-        VkRect2D scissor{ {0,0}, _lveSwapChain->getSwapChainExtent() };
+        VkRect2D scissor{ {0,0}, _chVkSwapChain->getSwapChainExtent() };
 
         vkCmdSetViewport(_commandBuffers[imageIndex], 0, 1, &viewport);
         vkCmdSetScissor(_commandBuffers[imageIndex], 0, 1, &scissor);
 
-        _lvePipeline->Bind(_commandBuffers[imageIndex]);
-        _lveModel->Bind(_commandBuffers[imageIndex]);
-
-        for (int j = 0; j < 4; j++)
-        {
-            SimplePushConstantData push{};
-            push.offset = { -0.5f + frame * 0.0002f, -0.4f + j * 0.25f };
-            push.color = { 0.0f, 0.0f, 0.2f + 0.2f * j };
-
-            vkCmdPushConstants(_commandBuffers[imageIndex], _lvePipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-                0, sizeof(SimplePushConstantData), &push);
-
-            _lveModel->Draw(_commandBuffers[imageIndex]);
-        }
-
+        RenderGameObjects(_commandBuffers[imageIndex]);
         
-
         vkCmdEndRenderPass(_commandBuffers[imageIndex]);
 
         if (vkEndCommandBuffer(_commandBuffers[imageIndex]) != VK_SUCCESS)
@@ -214,26 +207,50 @@ namespace lve
             throw std::runtime_error("failed to record command buffers");
         }
     }
+    
+    void FirstApp::RenderGameObjects(VkCommandBuffer commandBuffer)
+    {
+        _chVkPipeline->Bind(commandBuffer);
+
+        for (auto& obj : _chVkGameObjects)
+        {
+            obj._transform2d.rotation = glm::mod(obj._transform2d.rotation + 0.0001f, glm::two_pi<float>());
+            SimplePushConstantData push{};
+            push.offset = obj._transform2d.translation;
+            push.color = obj._color;
+            push.transform = obj._transform2d.mat2();
+
+            vkCmdPushConstants(
+                commandBuffer,
+                _chVkPipelineLayout,
+                VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+                0,
+                sizeof(SimplePushConstantData),
+                &push);
+            obj._model->Bind(commandBuffer);
+            obj._model->Draw(commandBuffer);
+        }
+    }
 
     void FirstApp::RecreateSwapChain()
     {
-        auto extent = _lveWindow.GetExtent();
+        auto extent = _chVkWindow.GetExtent();
         while (extent.width == 0 || extent.height == 0)
         {
-            extent = _lveWindow.GetExtent();
+            extent = _chVkWindow.GetExtent();
             glfwWaitEvents();
         }
 
-        vkDeviceWaitIdle(_lveDevice.device());
+        vkDeviceWaitIdle(_chVkDevice.device());
 
-        if (_lveSwapChain == nullptr)
+        if (_chVkSwapChain == nullptr)
         {
-            _lveSwapChain = std::make_unique<LveSwapChain>(_lveDevice, extent);
+            _chVkSwapChain = std::make_unique<chVkSwapChain>(_chVkDevice, extent);
         }
         else
         {
-            _lveSwapChain = std::make_unique<LveSwapChain>(_lveDevice, extent, std::move(_lveSwapChain));
-            if (_lveSwapChain->imageCount() != _commandBuffers.size())
+            _chVkSwapChain = std::make_unique<chVkSwapChain>(_chVkDevice, extent, std::move(_chVkSwapChain));
+            if (_chVkSwapChain->imageCount() != _commandBuffers.size())
             {
                 FreeCommandBuffers();
                 CreateCommandBuffers();

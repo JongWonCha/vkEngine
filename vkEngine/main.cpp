@@ -7,7 +7,7 @@
 
 int main()
 {
-    lve::FirstApp app{};
+    chVk::FirstApp app{};
     
     try
     {

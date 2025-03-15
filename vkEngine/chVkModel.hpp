@@ -1,14 +1,14 @@
 ﻿#pragma once
-#include "lveDevice.hpp"
+#include "chVkDevice.hpp"
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
 #include <vector>
 
-namespace lve
+namespace chVk
 {
-    class LveModel
+    class chVkModel
     {
     public:
         struct Vertex
@@ -19,18 +19,18 @@ namespace lve
             static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();
         };
 
-        LveModel(LveDevice& lveDevice, const std::vector<Vertex>& vertices);
-        ~LveModel();
+        chVkModel(chVkDevice& chVkDevice, const std::vector<Vertex>& vertices);
+        ~chVkModel();
 
-        LveModel(const LveModel&) = delete;
-        LveModel& operator=(const LveModel&) = delete;
+        chVkModel(const chVkModel&) = delete;
+        chVkModel& operator=(const chVkModel&) = delete;
 
         void Bind(VkCommandBuffer commandBuffer);
         void Draw(VkCommandBuffer commandBuffer);
     private:
         void CreateVertexBuffers(const std::vector<Vertex>& vertices);
         
-        LveDevice&      _device;
+        chVkDevice&      _device;
         VkBuffer        _vertexBuffer;
         VkDeviceMemory  _vertexBufferMemory;
         uint32_t        _vertexCount;

@@ -3,9 +3,9 @@
 #include <string>
 #include <GLFW/glfw3.h>
 
-namespace lve
+namespace chVk
 {
-	class LveWindow
+	class chVkWindow
 	{
 	private:
 		int	_width;
@@ -19,12 +19,12 @@ namespace lve
 		void InitWindow();
 		static void FrameBufferResizeCallback(GLFWwindow* window, int width, int height);
 	public:
-		LveWindow(int width, int height, std::string windowName);
-		~LveWindow();
+		chVkWindow(int width, int height, std::string windowName);
+		~chVkWindow();
 
 		
-		LveWindow(const LveWindow& other) = delete;
-		LveWindow& operator=(const LveWindow& other) = delete;
+		chVkWindow(const chVkWindow& other) = delete;
+		chVkWindow& operator=(const chVkWindow& other) = delete;
 
 		bool ShouldClose() const { return glfwWindowShouldClose(_window); }
 		VkExtent2D GetExtent() const {return {static_cast<uint32_t>(_width), static_cast<uint32_t>(_height)};}
