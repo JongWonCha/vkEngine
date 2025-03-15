@@ -144,6 +144,7 @@
     <ClCompile Include="chVkPipeline.cpp" />
     <ClCompile Include="chVkWindow.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SimpleRenderSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="chVkRenderer.hpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="chVkSwapChain.hpp" />
     <ClInclude Include="chVkPipeline.hpp" />
     <ClInclude Include="chVkWindow.hpp" />
+    <ClInclude Include="SimpleRenderSystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="compile.bat" />

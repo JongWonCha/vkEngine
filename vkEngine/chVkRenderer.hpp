@@ -30,7 +30,13 @@ namespace chVk
 		VkCommandBuffer                 GetCurrentCommandBuffer() const
         { 
 			assert(_isFrameStarted && "Cannot Get CommandBuffer When Frame Not In Progress");
-            return _commandBuffers[_currentImageIndex]; 
+            return _commandBuffers[_currentFrameIndex]; 
+        }
+
+		int GetFrameIndex() const
+        { 
+			assert(_isFrameStarted && "Cannot Get Frame Index When Frame Not In Progress");
+            return _currentFrameIndex;
         }
 
     private:
@@ -44,6 +50,7 @@ namespace chVk
         std::vector<VkCommandBuffer>    _commandBuffers;
 
         uint32_t                        _currentImageIndex{ 0 };
+		int                             _currentFrameIndex{ 0 };
         bool                            _isFrameStarted{ false };
     };
 }

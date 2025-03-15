@@ -22,7 +22,7 @@ namespace chVk
 	{
 		assert(_chVkSwapChain != nullptr && "Cannot Create Pipeline befor SwapChain");
 		
-		_commandBuffers.resize(_chVkSwapChain->imageCount());
+		_commandBuffers.resize(ChVkSwapChain::MAX_FRAMES_IN_FLIGHT);
 
 		VkCommandBufferAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -59,11 +59,12 @@ namespace chVk
 		}
 		else
 		{
-			_chVkSwapChain = std::make_unique<ChVkSwapChain>(_chVkDevice, extent, std::move(_chVkSwapChain));
-			if (_chVkSwapChain->imageCount() != _commandBuffers.size())
+			std::shared_ptr<ChVkSwapChain> oldSwapChain = std::move(_chVkSwapChain);
+			_chVkSwapChain = std::make_unique<ChVkSwapChain>(_chVkDevice, extent, oldSwapChain);
+
+			if ( !oldSwapChain->CompareSwapFormats(*_chVkSwapChain.get()) )
 			{
-				FreeCommandBuffers();
-				CreateCommandBuffers();
+				std::runtime_error("Swap Chain Image/Depth Format Mismatch");
 			}
 		}
 		//CreatePipeline();
@@ -117,7 +118,7 @@ namespace chVk
 		}
 
 		_isFrameStarted = false;
-
+		_currentFrameIndex = (_currentFrameIndex + 1) % ChVkSwapChain::MAX_FRAMES_IN_FLIGHT;
 	}
 
 	void ChVkRenderer::BeginSwapChainRenderPass(VkCommandBuffer commandBuffer)
