@@ -138,8 +138,8 @@
     <ClCompile Include="chVkRenderer.cpp" />
     <ClCompile Include="firstApp.cpp" />
     <ClCompile Include="chVkDevice.cpp" />
-    <ClCompile Include="chVkGameObject.cpp" />
-    <ClCompile Include="chVkModel.cpp" />
+    <ClCompile Include="ChVkGameObject.cpp" />
+    <ClCompile Include="ChVkModel.cpp" />
     <ClCompile Include="chVkSwapChain.cpp" />
     <ClCompile Include="chVkPipeline.cpp" />
     <ClCompile Include="chVkWindow.cpp" />
@@ -150,8 +150,8 @@
     <ClInclude Include="chVkRenderer.hpp" />
     <ClInclude Include="firstApp.hpp" />
     <ClInclude Include="chVkDevice.hpp" />
-    <ClInclude Include="chVkGameObject.hpp" />
-    <ClInclude Include="chVkModel.hpp" />
+    <ClInclude Include="ChVkGameObject.hpp" />
+    <ClInclude Include="ChVkModel.hpp" />
     <ClInclude Include="chVkSwapChain.hpp" />
     <ClInclude Include="chVkPipeline.hpp" />
     <ClInclude Include="chVkWindow.hpp" />

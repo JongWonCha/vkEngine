@@ -13,9 +13,8 @@ namespace chVk
 {
 	struct SimplePushConstantData
 	{
-		glm::mat2 transform{ 1.f };
+		glm::mat4 transform{ 1.f };
 		// same as vec2, vec2(padding), vec3
-		glm::vec2 offset;
 		alignas(16) glm::vec3 color;
 	};
 
@@ -30,18 +29,18 @@ namespace chVk
 		vkDestroyPipelineLayout(_chVkDevice.device(), _chVkPipelineLayout, nullptr);
 	}
 
-	void SimpleRenderSystem::RenderGameObjects(VkCommandBuffer commandBuffer, std::vector<chVkGameObject>& gameObjects)
+	void SimpleRenderSystem::RenderGameObjects(VkCommandBuffer commandBuffer, std::vector<ChVkGameObject>& gameObjects)
 	{
 		_chVkPipeline->Bind(commandBuffer);
 
 		for (auto& obj : gameObjects)
 		{
-			obj._transform2d.rotation = glm::mod(obj._transform2d.rotation + 0.0001f, glm::two_pi<float>());
+			obj._transform.rotation.y = glm::mod(obj._transform.rotation.y + 0.0001f, glm::two_pi<float>());
+			obj._transform.rotation.x = glm::mod(obj._transform.rotation.x + 0.00005f, glm::two_pi<float>());
 
 			SimplePushConstantData push{};
-			push.offset = obj._transform2d.translation;
 			push.color = obj._color;
-			push.transform = obj._transform2d.mat2();
+			push.transform = obj._transform.mat4();
 
 			vkCmdPushConstants(
 				commandBuffer,

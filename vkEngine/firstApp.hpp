@@ -25,12 +25,13 @@ namespace chVk
 
         void Run();
     private:
+        std::unique_ptr<ChVkModel> CreateCubeModel(ChVkDevice& device, glm::vec3 offset);
         void LoadGameObjects();
         
         ChVkWindow                      _chVkWindow{WIDTH, HEIGHT, "Hello Vulkan!"};
         ChVkDevice                      _chVkDevice{_chVkWindow};
 		ChVkRenderer					_chVkRenderer{ _chVkWindow, _chVkDevice };
 
-        std::vector<chVkGameObject>     _chVkGameObjects;
+        std::vector<ChVkGameObject>     _chVkGameObjects;
     };
 }

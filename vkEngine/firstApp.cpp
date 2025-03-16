@@ -49,26 +49,75 @@ namespace chVk
         vkDeviceWaitIdle(_chVkDevice.device());
     }
 
+    std::unique_ptr<ChVkModel> FirstApp::CreateCubeModel(ChVkDevice& device, glm::vec3 offset)
+    {
+        std::vector<ChVkModel::Vertex> vertices
+        {
+            // left face (white)
+          {{-.5f, -.5f, -.5f}, {.9f, .9f, .9f}},
+          {{-.5f, .5f, .5f}, {.9f, .9f, .9f}},
+          {{-.5f, -.5f, .5f}, {.9f, .9f, .9f}},
+          {{-.5f, -.5f, -.5f}, {.9f, .9f, .9f}},
+          {{-.5f, .5f, -.5f}, {.9f, .9f, .9f}},
+          {{-.5f, .5f, .5f}, {.9f, .9f, .9f}},
+ 
+          // right face (yellow)
+          {{.5f, -.5f, -.5f}, {.8f, .8f, .1f}},
+          {{.5f, .5f, .5f}, {.8f, .8f, .1f}},
+          {{.5f, -.5f, .5f}, {.8f, .8f, .1f}},
+          {{.5f, -.5f, -.5f}, {.8f, .8f, .1f}},
+          {{.5f, .5f, -.5f}, {.8f, .8f, .1f}},
+          {{.5f, .5f, .5f}, {.8f, .8f, .1f}},
+ 
+          // top face (orange, remember y axis points down)
+          {{-.5f, -.5f, -.5f}, {.9f, .6f, .1f}},
+          {{.5f, -.5f, .5f}, {.9f, .6f, .1f}},
+          {{-.5f, -.5f, .5f}, {.9f, .6f, .1f}},
+          {{-.5f, -.5f, -.5f}, {.9f, .6f, .1f}},
+          {{.5f, -.5f, -.5f}, {.9f, .6f, .1f}},
+          {{.5f, -.5f, .5f}, {.9f, .6f, .1f}},
+ 
+          // bottom face (red)
+          {{-.5f, .5f, -.5f}, {.8f, .1f, .1f}},
+          {{.5f, .5f, .5f}, {.8f, .1f, .1f}},
+          {{-.5f, .5f, .5f}, {.8f, .1f, .1f}},
+          {{-.5f, .5f, -.5f}, {.8f, .1f, .1f}},
+          {{.5f, .5f, -.5f}, {.8f, .1f, .1f}},
+          {{.5f, .5f, .5f}, {.8f, .1f, .1f}},
+ 
+          // nose face (blue)
+          {{-.5f, -.5f, 0.5f}, {.1f, .1f, .8f}},
+          {{.5f, .5f, 0.5f}, {.1f, .1f, .8f}},
+          {{-.5f, .5f, 0.5f}, {.1f, .1f, .8f}},
+          {{-.5f, -.5f, 0.5f}, {.1f, .1f, .8f}},
+          {{.5f, -.5f, 0.5f}, {.1f, .1f, .8f}},
+          {{.5f, .5f, 0.5f}, {.1f, .1f, .8f}},
+ 
+          // tail face (green)
+          {{-.5f, -.5f, -0.5f}, {.1f, .8f, .1f}},
+          {{.5f, .5f, -0.5f}, {.1f, .8f, .1f}},
+          {{-.5f, .5f, -0.5f}, {.1f, .8f, .1f}},
+          {{-.5f, -.5f, -0.5f}, {.1f, .8f, .1f}},
+          {{.5f, -.5f, -0.5f}, {.1f, .8f, .1f}},
+          {{.5f, .5f, -0.5f}, {.1f, .8f, .1f}},
+        };
+
+        for (auto& v : vertices)
+        {
+            v.position += offset;
+        }
+
+        return std::make_unique<ChVkModel>(device, vertices);
+    }
+
     void FirstApp::LoadGameObjects()
     {
-        std::vector<chVkModel::Vertex> vertices(3);
-        vertices[0].position = { 0.0f, -0.5f };
-        vertices[0].color = { 1.0f, 0.0f, 0.0f };
-        vertices[1].position = { 0.5f, 0.5f };
-        vertices[1].color = { 0.0f, 1.0f, 0.0f };
-        vertices[2].position = { -0.5f, 0.5f };
-        vertices[2].color = { 0.0f, 0.0f, 1.0f };
+        std::shared_ptr<ChVkModel> model = CreateCubeModel(_chVkDevice, {0.0f, 0.0f, 0.0f});
         
-
-        auto _chVkModel = std::make_shared<chVkModel>(_chVkDevice, vertices);
-
-        auto triangle = chVkGameObject::CreateGameObject();
-        triangle._model = _chVkModel;
-        triangle._color = glm::vec3(0.1f, 0.8f, 0.1f);
-        triangle._transform2d.translation.x = 0.2f;
-        triangle._transform2d.scale = { 2.f, 0.5f };
-        triangle._transform2d.rotation = 0.25f * glm::two_pi<float>();
-        
-        _chVkGameObjects.push_back(std::move(triangle));
+        auto cube = ChVkGameObject::CreateGameObject();
+        cube._model = model;
+        cube._transform.translation = glm::vec3(0.0f, 0.0f, 0.5f);
+        cube._transform.scale = glm::vec3(0.5f, 0.5f, 0.5f);
+        _chVkGameObjects.push_back(std::move(cube));
     }
 }

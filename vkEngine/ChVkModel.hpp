@@ -8,22 +8,22 @@
 
 namespace chVk
 {
-    class chVkModel
+    class ChVkModel
     {
     public:
         struct Vertex
         {
-            glm::vec2 position;
+            glm::vec3 position;
             glm::vec3 color;
             static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();
             static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();
         };
 
-        chVkModel(ChVkDevice& chVkDevice, const std::vector<Vertex>& vertices);
-        ~chVkModel();
+        ChVkModel(ChVkDevice& chVkDevice, const std::vector<Vertex>& vertices);
+        ~ChVkModel();
 
-        chVkModel(const chVkModel&) = delete;
-        chVkModel& operator=(const chVkModel&) = delete;
+        ChVkModel(const ChVkModel&) = delete;
+        ChVkModel& operator=(const ChVkModel&) = delete;
 
         void Bind(VkCommandBuffer commandBuffer);
         void Draw(VkCommandBuffer commandBuffer);

@@ -2,7 +2,7 @@
 
 #include "chVkPipeline.hpp"
 #include "chVkDevice.hpp"
-#include "chVkGameObject.hpp"
+#include "ChVkGameObject.hpp"
 
 // std
 #include <memory>
@@ -19,7 +19,7 @@ namespace chVk
         SimpleRenderSystem(const SimpleRenderSystem&) = delete;
         SimpleRenderSystem& operator=(const SimpleRenderSystem&) = delete;
 
-        void RenderGameObjects(VkCommandBuffer commandBuffer, std::vector<chVkGameObject>& gameObjects);
+        void RenderGameObjects(VkCommandBuffer commandBuffer, std::vector<ChVkGameObject>& gameObjects);
 
     private:
         void CreatePipelineLayout();

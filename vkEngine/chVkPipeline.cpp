@@ -4,7 +4,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <cassert>
-#include "chVkModel.hpp"
+#include "ChVkModel.hpp"
 
 namespace chVk
 {
@@ -47,8 +47,8 @@ namespace chVk
         shaderStages[1].pNext = nullptr;
         shaderStages[1].pSpecializationInfo = nullptr;
 
-        auto bindingDescriptions = chVkModel::Vertex::getBindingDescriptions();
-        auto attributeDescriptions = chVkModel::Vertex::getAttributeDescriptions();
+        auto bindingDescriptions = ChVkModel::Vertex::getBindingDescriptions();
+        auto attributeDescriptions = ChVkModel::Vertex::getAttributeDescriptions();
         
         VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
